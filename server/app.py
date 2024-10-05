@@ -23,13 +23,6 @@ db.init_app(app)
 def index():
     return '<h1>Code challenge</h1>'
 
-@app.route('/heroes', methods=['GET'])
-def get_heroes():
-    heroes = Hero.query.all()
-    response_data = [hero.to_dict() for hero in heroes]
-    response = make_response(response_data, 200)
-    return response
-
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
