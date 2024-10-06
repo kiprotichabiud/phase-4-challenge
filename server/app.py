@@ -40,5 +40,12 @@ def get_hero(id):
         response = make_response({"error": "Hero not found"}, 404)
     return response
 
+@app.route('/powers', methods=['GET'])
+def get_powers():
+    powers = Power.query.all()
+    response_data = [power.to_dict() for power in powers]
+    response = make_response(response_data, 200)
+    return response
+
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
