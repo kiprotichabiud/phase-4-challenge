@@ -38,6 +38,10 @@ class Power(db.Model, SerializerMixin):
     # add serialization rules
 
     # add validation
+    @validates('description')
+    def validate_description(self, key, value):
+        assert len(value) >= 20, "Description must be at least 20 characters long."
+        return value
 
     def __repr__(self):
         return f'<Power {self.id}>'
@@ -54,6 +58,10 @@ class HeroPower(db.Model, SerializerMixin):
     # add serialization rules
 
     # add validation
+    @validates('strength')
+    def validate_strength(self, key, value):
+        assert value in ['Strong', 'Weak', 'Average'], "Strength must be one of: 'Strong', 'Weak', 'Average'."
+        return value
 
     def __repr__(self):
         return f'<HeroPower {self.id}>'
