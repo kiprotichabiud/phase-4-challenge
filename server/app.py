@@ -47,5 +47,38 @@ def get_powers():
     response = make_response(response_data, 200)
     return response
 
+
+@app.route('/powers/<int:id>', methods=['PATCH'])
+def update_power(id):
+    power = Power.query.get(id)
+    if power:
+        data = request.get_json()
+        try:
+            power.description = data['description']
+            db.session.commit()
+            response = make_response(power.to_dict(), 200)
+        except AssertionError as e:
+            response = make_response({"errors": [str(e)]}, 400)
+    else:
+        response = make_response({"error": "Power not found"}, 404)
+    return response
+
+
+@app.route('/hero_powers', methods=['POST'])
+def create_hero_power():
+    data = request.get_json()
+    try:
+        new_hero_power = HeroPower(
+            hero_id=data['hero_id'],
+            power_id=data['power_id'],
+            strength=data['strength']
+        )
+        db.session.add(new_hero_power)
+        db.session.commit()
+        response = make_response(new_hero_power.to_dict(), 201)
+    except AssertionError as e:
+        response = make_response({"errors": [str(e)]}, 400)
+    return response
+
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
